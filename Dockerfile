@@ -1,17 +1,15 @@
-FROM python:3.11-slim
+FROM python:3-alpine
 
-# Working directory
+# Create app directory
 WORKDIR /app
 
-# Copy requirements file and install dependencies
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Install app dependencies
+COPY requirements.txt ./
 
-# Copy the rest of the project files
+RUN pip install -r requirements.txt
+
+# Bundle app source
 COPY . .
 
-# Expose the server port
 EXPOSE 5000
-
-# Command to start the server
-CMD ["gunicorn", "-b", "127.0.0.1:5000", "app:app"]
+CMD [ "flask", "run","--host","0.0.0.0","--port","5000"]
